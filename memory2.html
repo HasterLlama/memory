@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gra Memory</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: monospace;
+        }
+        body{
+            background-color: #EDD4B2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 90vh;
+        }
+        main{
+            background-color: #D0A98F;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 30px;
+            padding: 40px 60px;
+        }
+        h2{
+            font-size: 3em;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .reset{
+            padding: 15px 20px;
+            background-color: #627264;
+            color: #CEEC97;
+            border: none;
+            font-size: 1.5em;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.4s;
+        }
+        .reset:hover{
+            color: darkred;
+            background-color: red;
+        }
+        .gra{
+            width: 440px;
+            height: 440px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            transform-style: preserve-3d;
+            perspective: 500px;
+        }
+        .item{
+            position: relative;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3em;
+            transform: rotateY(180deg);
+            background-color: #5B4B49;
+            transition: 0.25s;
+        }
+        .item.boxOpen{
+            transform: rotateY(0deg);
+        }
+        .item::after{
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: #0B0909;
+            transition: 0.25s;
+            transform: rotateY(0deg);
+            
+        }
+        .boxOpen:after, 
+        .boxMatch:after{
+            transform: rotateY(180deg);
+            backface-visibility: hidden;
+            
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h2>Gra memory</h2>
+        <div class="gra"></div>
+        <button class="reset" onclick="window.location.reload()">Zresetuj gre</button>
+    </main>
+    <script>
+        const emotki = ["😍","😍","😴","😴","🤑","🤑","😨","😨","🥶","🥶","🤬","🤬","🤡","🤡","🤮","🤮"];
+        var los_emotki = emotki.sort(() => (Math.random() > .5) ? 2 : -1)
+        for(var i=0;i<emotki.length;i++){
+            let box = document.createElement('div')
+            box.className = 'item';
+            box.innerHTML = los_emotki[i]
+
+            box.onclick = function(){
+                this.classList.add('boxOpen')
+                setTimeout(function(){
+                    if(document.querySelectorAll('.boxOpen').length > 1){
+                        if(document.querySelectorAll('.boxOpen')[0].innerHTML ==
+                        document.querySelectorAll('.boxOpen')[1].innerHTML){
+                            document.querySelectorAll('.boxOpen')[0].classList.add('boxMatch')
+                            document.querySelectorAll('.boxOpen')[1].classList.add('boxMatch')
+
+                            document.querySelectorAll('.boxOpen')[1].classList.remove('boxOpen')
+                            document.querySelectorAll('.boxOpen')[0].classList.remove('boxOpen')
+                        
+                            if(document.querySelectorAll('.boxMatch').length == emotki.length){
+                                alert('WYGRANA')
+                            }
+                        }   
+                        else {
+                            document.querySelectorAll('.boxOpen')[1].classList.remove('boxOpen')
+                            document.querySelectorAll('.boxOpen')[0].classList.remove('boxOpen')
+                        }
+                    }
+                },500)
+            }
+
+            document.querySelector('.gra').appendChild(box);
+        }
+        </script>
+</body>
+</html>
